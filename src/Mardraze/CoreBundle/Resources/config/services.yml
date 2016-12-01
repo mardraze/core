@@ -1,0 +1,11 @@
+parameters:
+    mardraze_http_host:      'http://localhost:8000'
+
+services:
+    mardraze_core.depedencies:
+        class: Mardraze\CoreBundle\Service\Depedencies
+        arguments: ["@service_container"]
+
+    mardraze_core.cache:
+        class: Doctrine\Common\Cache\FilesystemCache
+        arguments: ["%kernel.cache_dir%", '.mardraze_core.cache']

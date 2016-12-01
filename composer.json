@@ -1,0 +1,13 @@
+{
+    "name": "mardraze/core",
+    "license": "proprietary",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "require": {
+        "symfony/symfony": "2.*"
+    }
+}
