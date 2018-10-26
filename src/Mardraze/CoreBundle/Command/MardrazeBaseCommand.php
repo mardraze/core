@@ -1,58 +1,48 @@
 <?php
 
-namespace Mardraze\CoreBundle\Controller;
+namespace Mardraze\CoreBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class BaseController extends Controller
-{
+class MardrazeBaseCommand extends Command{
+
+
     /**
      * @var \Mardraze\CoreBundle\Service\Dependencies
      */
     protected $dependencies;
 
-    public function setContainer(ContainerInterface $container = null) {
-        parent::setContainer($container);
-
-        $this->dependencies = $this->get('mardraze_core.dependencies');
-    }
-
-    public function redirect404($msg = ''){
-        throw $this->createNotFoundException($msg);
-    }
+    /**
+     * @var \Symfony\Component\Console\Input\InputInterface
+     */
+    protected $input;
 
     /**
-     * @param bool $condition
-     * @param string $msg
+     * @var \Symfony\Component\Console\Output\OutputInterface
      */
-    public function redirect404Unless($condition, $msg = ''){
-        if(!$condition){
-            throw $this->createNotFoundException($msg);
-        }
+    protected $output;
+
+    protected function configure() {
+        $this->setName('mardraze:base');
+    }
+    public function run(InputInterface $input, OutputInterface $output)
+    {
+        $this->dependencies = $this->getApplication()->getKernel()->getContainer()->get('mardraze_core.dependencies');
+        $context = $this->dependencies->get('router')->getContext();
+
+        $mainHost = $this->dependencies->getParameter('mardraze_http_host');
+        $host = preg_replace('/http(s)?:\/\//', '', $mainHost);
+        $scheme = strpos($mainHost, 'https:') === false ? 'http' : 'https';
+        $context->setHost($host);
+        $context->setScheme($scheme);
+        $this->input = $input;
+        $this->output = $output;
+        return parent::run($input, $output);
     }
 
-    /**
-     * @param string $msg
-     */
-    public function setNotice($msg){
-        $this->dependencies->getRequest()->getSession()->getFlashBag()->set('notice', $msg);
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
     }
-
-    public function getParameter($str){
-        return $this->container->getParameter($str);
-    }
-
-    public function get($str){
-        return $this->container->get($str);
-    }
-
-    public function setFlash($key, $value){
-        $this->dependencies->getRequest()->getSession()->getFlashBag()->set($key, $value);
-    }
-
-    public function getFlash($key){
-        $this->dependencies->getRequest()->getSession()->getFlashBag()->get($key);
-    }
-
 }
