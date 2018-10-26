@@ -10,9 +10,9 @@ class MardrazeBaseCommand extends Command{
 
 
     /**
-     * @var \Mardraze\CoreBundle\Service\Depedencies
+     * @var \Mardraze\CoreBundle\Service\Dependencies
      */
-    protected $depedencies;
+    protected $dependencies;
 
     /**
      * @var \Symfony\Component\Console\Input\InputInterface
@@ -29,10 +29,10 @@ class MardrazeBaseCommand extends Command{
     }
     public function run(InputInterface $input, OutputInterface $output)
     {
-        $this->depedencies = $this->getApplication()->getKernel()->getContainer()->get('mardraze_core.depedencies');
-        $context = $this->depedencies->get('router')->getContext();
+        $this->dependencies = $this->getApplication()->getKernel()->getContainer()->get('mardraze_core.dependencies');
+        $context = $this->dependencies->get('router')->getContext();
 
-        $mainHost = $this->depedencies->getParameter('mardraze_http_host');
+        $mainHost = $this->dependencies->getParameter('mardraze_http_host');
         $host = preg_replace('/http(s)?:\/\//', '', $mainHost);
         $scheme = strpos($mainHost, 'https:') === false ? 'http' : 'https';
         $context->setHost($host);
