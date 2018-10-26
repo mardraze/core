@@ -2,8 +2,8 @@ parameters:
     mardraze_http_host:      'http://localhost:8000'
 
 services:
-    mardraze_core.depedencies:
-        class: Mardraze\CoreBundle\Service\Depedencies
+    mardraze_core.dependencies:
+        class: Mardraze\CoreBundle\Service\Dependencies
         arguments: ["@service_container"]
 
     mardraze_core.cache:
