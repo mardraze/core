@@ -11,7 +11,7 @@ namespace Mardraze\CoreBundle\Service;
 
 use Symfony\Component\Security\Core\User\User;
 
-class Depedencies {
+class Dependencies {
 
 
     protected $container;
